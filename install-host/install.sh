@@ -149,7 +149,14 @@ case $distro in
 	"ubuntu" | "debian" | "kali" | "pop")
 		apt-get update
 		apt-get $OPT install sqlite3 git gcc make wget
-		filename="$(wget -qO- https://golang.org/dl/ | grep -oP 'go([0-9\.]+)\.linux-amd64\.tar\.gz' | head -n 1)";
+		arch=amd64
+		case $(uname -m) in
+			"aarch64")
+				arch=arm64;;
+			*)
+				:;;
+		esac
+		filename="$(wget -qO- https://golang.org/dl/ | grep -oP 'go([0-9\.]+)\.linux-'"$arch"'\.tar\.gz' | head -n 1)";
 		install_go $filename
 		install_vuls;;
 	"raspbian")
